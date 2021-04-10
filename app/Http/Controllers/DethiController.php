@@ -40,7 +40,7 @@ class DethiController extends Controller
     	return view('admin.dethi.dsdethi',['dethi'=>$dethi]);
     }
 
-   
+
     public function hocsinhctdethi($id){
         $dethi = DB::table('dethi')
         ->join('monthi', 'monthi.id_mh', '=', 'dethi.id_mh')
@@ -66,7 +66,7 @@ class DethiController extends Controller
        $id_de = $id;
         return view('admin.thitructuyen.chitiet',['dethi'=>$dethi, 'delienquan'=>$delienquan,'binhluan'=>$binhluan,'id_de'=>$id_de]);
     }
-    
+
 
     public function getCtdethi($id){
         $mucdo = MucDo::all();
@@ -100,7 +100,7 @@ class DethiController extends Controller
          ->where('cauhoi.id_khoi','=',$dethi->id_khoi)
          ->get()->toArray();
 
-        
+
          //cái này là để lấy tấc cả các id_cauhoi trong ctdethi add vao 1 mang, để dùng lm điều kiện query dap an,
         $id_cauhoi = array();
         foreach ($ctdethi as $item) {
@@ -108,7 +108,7 @@ class DethiController extends Controller
              array_push($id_cauhoi, (integer)$item->id_cauhoi);
              // dd($id_cauhoi);
         }
-         $dapan = Db::table('dapandung')->whereIn('id_cauhoi', $id_cauhoi)->get();  // lấy những đáp án có id_cau hỏi  nằm trong cái mãng đó 
+         $dapan = Db::table('dapandung')->whereIn('id_cauhoi', $id_cauhoi)->get();  // lấy những đáp án có id_cau hỏi  nằm trong cái mãng đó
            // dd($dapan);
     	return view('admin.dethi.ctdethi',['dethi'=>$dethi, 'ctdethi'=>$ctdethi, 'mucdo'=>$mucdo, 'dapan' =>$dapan, 'mdnhanbiet'=>$mdnhanbiet,'thonghieu'=>$mdthonghieu,'mdvandung'=>$mdvandung]);
     }
@@ -118,13 +118,13 @@ class DethiController extends Controller
         $monthi = MonThi::all();
         $giaovien = GiaoVien::all();
         $khoi = Khoi::all();
-        return view('admin.dethi.themdethi',['kythi'=>$kythi,'monthi'=>$monthi, 'giaovien'=>$giaovien, 'khoi'=>$khoi]); 
-    	
+        return view('admin.dethi.themdethi',['kythi'=>$kythi,'monthi'=>$monthi, 'giaovien'=>$giaovien, 'khoi'=>$khoi]);
+
     }
 
     public function thempostdethi(Request $request){
         $this->validate($request,
-            [   
+            [
                 'tenkythi' =>'required',
                 'namekhoi' =>'required',
                 'namemonthi' =>'required',
@@ -166,7 +166,7 @@ class DethiController extends Controller
             $de->trangthai = $request->trangthai;
             //lưu
             $de->save();
-            //dẫn về trang 
+            //dẫn về trang
             return redirect('giaovien/dethi/dsdethi')->with('thongbao','Thêm thành công!');
     }
 
@@ -176,13 +176,13 @@ class DethiController extends Controller
         $monthi = MonThi::all();
         $giaovien = GiaoVien::all();
         $khoi = Khoi::all();
-        return view('admin.dethi.suadethi',['kythi'=>$kythi,'monthi'=>$monthi, 'giaovien'=>$giaovien, 'khoi'=>$khoi,'dethi'=>$dethi]); 
+        return view('admin.dethi.suadethi',['kythi'=>$kythi,'monthi'=>$monthi, 'giaovien'=>$giaovien, 'khoi'=>$khoi,'dethi'=>$dethi]);
     }
 
     public function postsuade($id, Request $request){
         $de = DeThi::find($id);
         $this->validate($request,
-            [   
+            [
                 'tenkythi' =>'required',
                 'namekhoi' =>'required',
                 'namemonthi' =>'required',
@@ -223,14 +223,14 @@ class DethiController extends Controller
             $de->trangthai = $request->trangthai;
             //lưu
             $de->save();
-            //dẫn về trang 
+            //dẫn về trang
             return redirect('giaovien/dethi/dsdethi')->with('thongbao','Sửa thành công!');
     }
 
     public function xoade($id){
         DeThi::destroy($id);
         return redirect('giaovien/dethi/dsdethi')->with('thongbao','Bạn đã xóa thành công!');
-        
+
     }
 
       public function importmd(){
@@ -238,13 +238,13 @@ class DethiController extends Controller
     }
 
       public function importExcel(Request $request){
-       
+
          Excel::import(new ImportRecipes, $request->file);
 
         return view('admin.dethi.dsdethi');
     }
 
-       
+
 
     public function randomcauhoi(Request $request){
          $this->validate($request,
@@ -284,7 +284,7 @@ class DethiController extends Controller
          ->where('cauhoi.id_mh','=',$request->idmonhoc)
          ->where('cauhoi.id_khoi','=',$request->idkhoi)->inRandomOrder()->take($request->socau_md3)
          ->get()->pluck('id_cauhoi');
-       
+
          if($request->socau_md1 + $request->socau_md2 +$request->socau_md3 != $request->socauhoi){
             return redirect()->back()->with('thongbao',"Số câu hỏi không hợp lệ");
          }
@@ -292,7 +292,7 @@ class DethiController extends Controller
              $all = array_merge($mdnhanbiet->toArray(), $mdthonghieu->toArray(), $mdvandung->toArray());
 
             $data = [];
-             
+
             foreach ($all as $item) {
                 $data[] = [
                     'id_de' => $request->idExam,
@@ -301,15 +301,15 @@ class DethiController extends Controller
                     'updated_at' => new \DateTime(),
                 ];
             }
-             CtDeThi::insert($data); 
+             CtDeThi::insert($data);
          }
 
-        
+
           return redirect('giaovien/dethi/dsdethi')->with('thongbao',' Thành công!');
 
 
         // dd($data);
 }
 
-    
+
 }

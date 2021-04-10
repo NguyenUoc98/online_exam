@@ -13,7 +13,7 @@ class CreateExamTable extends Migration
      */
     public function up()
     {
-        Schema::create('exam', function (Blueprint $table) {
+        Schema::create('exams', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('semester_id')->comment('ID kỳ thi')->index();
             $table->integer('grade_id')->comment('ID khối')->index();
@@ -34,6 +34,6 @@ class CreateExamTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('exam');
+        Schema::dropIfExists('exams');
     }
 }

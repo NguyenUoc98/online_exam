@@ -14,8 +14,12 @@ Route::post('/postuser','UserController@postthemuser')->name('postuser');
 
 Route::get('/', function () {
     return view('admin.layout.trangchuAD');
-
 });
+
+Route::get('home', [
+    'as' => 'home',
+    'uses' => 'HomeController@index'
+]);
 
 Route::get('lichsuthi/{id}','TrangchuController@getlichsuthi');
 
@@ -51,7 +55,7 @@ Route::get('gvdangxuat','TrangchuController@gvdangxuat');
 Route::get('dashbroad_ad','ThongKeController@thongke_ad');
 Route::get('giaovien/dash/dashbroad_gv','ThongKeController@thongke_gv');
 
-Route::get('trangchu','TrangchuController@getDeThi');
+
 Route::get('gioithieu', function () {
     return view('admin.layout.gioithieu');
 });
@@ -89,7 +93,7 @@ Route::get('chitiet', function () {
 Route::post('thembinhluan/{id}','ThaoluandethiController@postthemcmt');
 
 
-Route::get('dethi/{id}','DeThiController@hocsinhctdethi');
+Route::get('dethi/{id}','DethiController@hocsinhctdethi');
 
 Route::get('search','TrangchuController@getSearch');
 Route::get('thithptquocgia','TrangchuController@getthithptquocgia');
@@ -99,14 +103,14 @@ Route::get('thihocki','TrangchuController@getthihocky');
 
 //nhóm các route có chung tiền tố
 Route::group(['prefix'=>'admin'], function(){
-	
+
 	Route::group(['prefix'=>'dangnhap'], function(){
 		Route::get('dashbroadgv', function () {
     		return view('admin.layout.dashbroad_gv');
 		});
 
 		Route::get('dashbroadad','GiaoVienController@dashadminn');
-	
+
 	});
 
 	Route::group(['prefix'=>'khoi'], function(){
@@ -127,9 +131,9 @@ Route::group(['prefix'=>'admin'], function(){
 		Route::get('dskythi','KyThiController@getKythi');
 
 		Route::get('themkythi','KyThiController@themkythi');
-		
+
 		Route::get('xoakythi/{id}','KyThiController@xoakt');
-		
+
 	});
 
 	Route::group(['prefix'=>'giaovien'], function(){
@@ -144,13 +148,25 @@ Route::group(['prefix'=>'admin'], function(){
 		Route::get('xoagiaovien/{id}','GiaoVienController@xoagiaovien');
 	});
 
+    Route::group(['prefix'=>'hocsinh'], function(){
+        Route::get('dshocsinh','GiaoVienController@getgv');
+
+        Route::get('themgiaovien','GiaoVienController@getthemgv');
+        Route::post('themgiaovien','GiaoVienController@postthemgv');
+        Route::get('suagiaovien/{id}','GiaoVienController@getsuagv');
+        Route::post('suagiaovien/{id}','GiaoVienController@postsuagv');
+        Route::get('importgiaovien','GiaoVienController@importgv');
+        Route::post('importgiaovien','GiaoVienController@import');
+        Route::get('xoagiaovien/{id}','GiaoVienController@xoagiaovien');
+    });
+
 	Route::group(['prefix'=>'user'], function(){
 		Route::get('dsuser','UserController@getuser');
 
 		Route::get('themuser','UserController@getthemuser');
 		Route::post('thempost','UserController@postthemuser');
 		Route::get('suauser/{id}','UserController@getsuauser');
-		
+
 
 		Route::get('xoauser/{id}','UserController@xoauser');
 	});
@@ -159,7 +175,7 @@ Route::group(['prefix'=>'admin'], function(){
 	Route::group(['prefix'=>'ketqua'], function(){
 		Route::get('dsketqua','KetQuaController@ketquathi');
 		Route::get('exportPDF','KetQuaController@exportPDF');
-		
+
 });
 	Route::get('exportKetQua','ExcelController@exportKetQua');
 
@@ -169,7 +185,7 @@ Route::group(['prefix'=>'admin'], function(){
 
 //route cho giáo viên
 Route::group(['prefix'=>'giaovien'], function(){
-	
+
 
 	Route::group(['prefix'=>'loaicauhoi'], function(){
 		//giaovien/loaicauhoi/getLoai
@@ -180,8 +196,8 @@ Route::group(['prefix'=>'giaovien'], function(){
 		Route::get('themloai','LoaiCauhoiController@themloai');
 		Route::post('thempost','LoaiCauhoiController@postthemloai');
 
-		
-		
+
+
 
 		Route::get('xoaloai/{id}','LoaiCauhoiController@getxoaloai');
 
@@ -190,7 +206,7 @@ Route::group(['prefix'=>'giaovien'], function(){
 		Route::post('importloai','LoaiCauhoiController@importExcel');
 	});
 	// Route::get('loaicauhoi/dscauhoi','CauhoiController@getCauhoi');
-		
+
 
 		Route::post('suapost/{id}','LoaiCauhoiController@postsualoai');
 		Route::get('sualoai/{id}','LoaiCauhoiController@sualoai');
@@ -202,7 +218,7 @@ Route::group(['prefix'=>'giaovien'], function(){
 		Route::post('themcauhoi','CauhoiController@themcauhoipost');
 
 		Route::post('themdapan','CauhoiController@themdapan');
-		
+
 		Route::get('xoacauhoi/{id}','CauhoiController@xoach');
 
 		Route::get('exportPDF','CauhoiController@exportPDF');
@@ -237,7 +253,7 @@ Route::group(['prefix'=>'giaovien'], function(){
 		Route::get('themdethi','DethiController@themdethi');
 		Route::post('themdethi','DethiController@thempostdethi');
 
-		Route::get('xoadethi/{id}','DeThiController@xoade');
+		Route::get('xoadethi/{id}','DethiController@xoade');
 
 		Route::get('import','DethiController@getImport');
 		Route::post('import','DethiController@importExcel');
@@ -249,7 +265,7 @@ Route::group(['prefix'=>'giaovien'], function(){
 
 	Route::get('ctdethi/{id}','DethiController@getCtdethi');
 	Route::post('randomcauhoi','DethiController@randomcauhoi');
-	
+
 		Route::get('suadethi','DethiController@suadethi');
 
 	Route::group(['prefix'=>'ketqua'], function(){
@@ -259,7 +275,7 @@ Route::group(['prefix'=>'giaovien'], function(){
 	});
 
 
-	
+
 });
 
 
